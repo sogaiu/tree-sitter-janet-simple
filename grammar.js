@@ -1,29 +1,29 @@
 // numbers
 const SIGN =
-      choice('-', '+');
+  choice('-', '+');
 const DIGIT =
-      /[0-9]/;
+  /[0-9]/;
 const HEX_DIGIT =
-      /[0-9A-Fa-f]/;
+  /[0-9A-Fa-f]/;
 const RADIX =
-      choice('2', '3', '4', '5', '6', '7', '8', '9', '10',
-             '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-             '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-             '31', '32', '33', '34', '35', '36');
+  choice('2', '3', '4', '5', '6', '7', '8', '9', '10',
+         '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+         '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+         '31', '32', '33', '34', '35', '36');
 const ALPHA_NUM =
-      /[a-zA-Z0-9]/;
+  /[a-zA-Z0-9]/;
 
 // symbols and keywords
 // janet/tools/symcharsgen.c
 const SYM_CHAR_NO_DIGIT_NO_COLON =
-      /[a-zA-Z!$%&*+\-./<?=>@^_]/;
+  /[a-zA-Z!$%&*+\-./<?=>@^_]/;
 const SYM_CHAR =
-      /[0-9:a-zA-Z!$%&*+\-./<?=>@^_]/;
+  /[0-9:a-zA-Z!$%&*+\-./<?=>@^_]/;
 
 // strings
 const STRING_DOUBLE_QUOTE_CONTENT =
-      repeat(choice(/[^\\"]/,
-                    /\\(.|\n)/)); // thanks to tree-sitter-haskell
+  repeat(choice(/[^\\"]/,
+                /\\(.|\n)/)); // thanks to tree-sitter-haskell
 
 module.exports = grammar({
   name: 'janet_simple',
@@ -87,16 +87,18 @@ module.exports = grammar({
                    'true')),
 
     kwd_lit: $ =>
-      prec(2, token(seq(':',
-                        repeat(SYM_CHAR)))),
+      prec(2,
+           token(seq(':',
+                     repeat(SYM_CHAR)))),
 
     nil_lit: $ =>
       'nil',
 
     num_lit: $ =>
-      prec(5, choice($._dec,
-                     $._hex,
-                     $._radix)),
+      prec(5,
+           choice($._dec,
+                  $._hex,
+                  $._radix)),
 
     _dec: $ =>
       token(seq(optional(SIGN),
