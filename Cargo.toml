@@ -1,6 +1,6 @@
 [package]
 name = "tree-sitter-janet-simple"
-description = "janet grammar for the tree-sitter parsing library"
+description = "Janet grammar for the tree-sitter parsing library"
 version = "0.0.3"
 keywords = ["incremental", "parsing", "janet"]
 categories = ["parsing", "text-editors"]

@@ -25,23 +25,40 @@ There might end up being different trade-offs in either approach and my belief i
 
 Suppose typical development sources are stored under `~/src`.
 
+### Short Version
+
 ```
 # clone repository
 cd ~/src
 git clone https://github.com/sogaiu/tree-sitter-janet-simple
 cd tree-sitter-janet-simple
 
-# create / populate
-#   `node_modules` with dependencies
-#   `src` with tree-sitter .c goodness
-#   `build`
-#   `build/Release` and build `tree_sitter_janet_simple_binding.node`
+# install tree-sitter-cli and dependencies, then build
+npm ci
+```
+
+### Long Version
+
+```
+# clone repository
+cd ~/src
+git clone https://github.com/sogaiu/tree-sitter-janet-simple
+cd tree-sitter-janet-simple
+
+# ensure tree-sitter-cli is avaliable as a dev dependency
+npm install --save-dev --save-exact tree-sitter-cli
+
+# create `src` and populate with tree-sitter `.c` goodness
+npx tree-sitter generate
+
+# populate `node_modules` with dependencies
 npm install
 
-# included in previous command
-#npx tree-sitter generate
-#npx node-gyp configure
-#npx node-gyp rebuild
+# create `build` and populate appropriately
+npx node-gyp configure
+
+# create `build/Release` and build `tree_sitter_janet_simple_binding.node`
+npx node-gyp rebuild       # will actually do the configure part too
 ```
 
 ## Grammar Development
