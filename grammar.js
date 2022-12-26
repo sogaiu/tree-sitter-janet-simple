@@ -15,8 +15,10 @@ const ALPHA_NUM =
 
 // symbols and keywords
 // janet/tools/symcharsgen.c
+// XXX: missing unicode characters
 const SYM_CHAR_NO_DIGIT_NO_COLON =
   /[a-zA-Z!$%&*+\-./<?=>@^_]/;
+// XXX: missing unicode characters
 const SYM_CHAR =
   /[0-9:a-zA-Z!$%&*+\-./<?=>@^_]/;
 
