@@ -6,7 +6,8 @@
     {
       "scope": "source.janet",
       "file-types": [
-        "janet"
+        "janet",
+        "jdn"
       ]
     }
   ]
