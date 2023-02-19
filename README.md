@@ -1,131 +1,73 @@
 # tree-sitter-janet-simple
 
+A [Janet](https://janet-lang.org) grammar for tree-sitter.
+
 ## Status
 
-Subject to change, grammar still evolving.
+Usable, but as tree-sitter is pre-1.0, don't forget the salt.
 
-Coincidentally, it appears [another effort by GrayJack](https://github.com/GrayJack/tree-sitter-janet/) was started at about the same time.
+Coincidentally, it appears [another effort by
+GrayJack](https://github.com/GrayJack/tree-sitter-janet/) was started
+at about the same time.
 
-The main difference between these two are that GrayJack's grammar supports higher level constructs (e.g. `def` is recognized by the grammar).
+The main difference between these two are that GrayJack's grammar
+supports higher level constructs (e.g. `def` is recognized by the
+grammar) at the cost of accuracy.
 
-There might end up being different trade-offs in either approach and my belief is that there is room in the world for multiple attempts (especially for lisp-like languages).
+There might end up being different trade-offs in either approach and
+my belief is that there is room in the world for multiple attempts
+(especially for lisp-like languages).
 
-## Prerequisites
+## Content
 
-* [emsdk](https://emscripten.org/docs/getting_started/downloads.html#installation-instructions) -- emscripten via homebrew seems to work for macos
-* node >= 12 (nvm recommended) -- recently tested 12.9.1, 12,16,1
+This repository currently provides "source" files such as:
 
-## Fine Print
+* `grammar.jdn` - can be used to generate a `grammar.js` and/or
+  `grammar.json` if one uses
+  [janet-ts-dsl](https://github.com/sogaiu/janet-ts-dsl)
+* `grammar.js` - can be used to generate `parser.c` using the
+  `tree-sitter` `generate` subcommand, but `node` is then required
+* `package.json` - without this file, the `tree-sitter` cli's
+  capabilities will be impacted.
 
-* The instructions below assume emsdk has been installed, but `emcc` (tool that can be used to compile to wasm) is not necessarily on one's `PATH`.  If an appropriate `emcc` is on one's `PATH` (e.g. emscripten installed via homebrew), the emsdk steps (e.g. `source ~/src/emsdk/emsdk_env.sh`) below may be ignored.
+Also, things that are provided (which are actually generated) but
+might disappear at some point:
 
-* `node-gyp` (tool for compiling native addon modules for Node.js) may fail on machines upgraded to macos Catalina. [This document](https://github.com/nodejs/node-gyp/blob/master/macOS_Catalina.md) may help cope with such a situation.
+* `src/parser.c` and friends [1] - other projects have come to expect
+  these to be committed to a grammar repository, but [there are forces
+  in the world wanting to remove
+  them](https://github.com/sogaiu/ts-questions/blob/master/questions/should-parser-source-be-committed/README.md),
+  so depending on how things go, these may disappear.
+* Rust bindings - tempted to remove these as I did with the Node.js
+  bindings (see below) but Rust bindings seem to be looked after a bit
+  better and there is much more evidence that tree-sitter grammar /
+  parser code is being used in Rust programs.
 
-## Initial Setup
+Used to provide but no longer do:
 
-Suppose typical development sources are stored under `~/src`.
+* Node.js bindings - it seems there isn't much love and care going to
+  node-tree-sitter upstream and I don't use or test these.  I felt it
+  was a bit misleading to be providing them so I removed them.  They
+  can be regenerated using an appropriate invocation of `tree-sitter
+  generate` though.
 
-### Short Version
+---
 
-```
-# clone repository
-cd ~/src
-git clone https://github.com/sogaiu/tree-sitter-janet-simple
-cd tree-sitter-janet-simple
+[1] Currently these files are generated to have ABI 13.
 
-# install tree-sitter-cli and dependencies, then build
-npm ci
-```
+---
 
-### Long Version
-
-```
-# clone repository
-cd ~/src
-git clone https://github.com/sogaiu/tree-sitter-janet-simple
-cd tree-sitter-janet-simple
-
-# ensure tree-sitter-cli is avaliable as a dev dependency
-npm install --save-dev --save-exact tree-sitter-cli
-
-# create `src` and populate with tree-sitter `.c` goodness
-npx tree-sitter generate
-
-# populate `node_modules` with dependencies
-npm install
-
-# create `build` and populate appropriately
-npx node-gyp configure
-
-# create `build/Release` and build `tree_sitter_janet_simple_binding.node`
-npx node-gyp rebuild       # will actually do the configure part too
-```
-
-## Grammar Development
-
-Hack on grammar and interactively test.
-
-```
-# prepare emsdk (specifically emcc) for building .wasm
-source ~/src/emsdk/emsdk_env.sh
-
-# edit grammar.js using some editor
-
-# rebuild tree-sitter stuff and invoke web-ui for interactive testing
-npx tree-sitter generate && \
-npx node-gyp rebuild && \
-npx tree-sitter build-wasm && \
-npx tree-sitter web-ui
-
-# in appropriate browser window, paste code in left pane
-
-# examine results in right pane -- can even click on nodes
-
-# find errors and loop back to edit step above...
-```
-
-Parse individual files.
-
-```
-# create and populate sample code file for parsing named `sample.janet`
-
-# parse sample file
-npx tree-sitter parse sample.janet
-
-# examine output similar to web-ui, but less convenient
-```
-
-## Measure Performance
-
-```
-# single measurement
-npx tree-sitter parse --time sample.janet
-
-# mutliple measurements with `multitime`
-multitime -n10 -s1 npx tree-sitter parse --time --quiet sample.janet
-```
-
-## Build .wasm
-
-Assuming emsdk is installed appropriately under `~/src/emsdk`.
-
-```
-# prepare emsdk (specifically emcc) for use
-source ~/src/emsdk/emsdk_env.sh
-
-# create `tree-sitter-janet-simple.wasm`
-npx tree-sitter build-wasm
-```
-
-## Resources
-
-* [Guide to your first Tree-sitter grammar](https://gist.github.com/Aerijo/df27228d70c633e088b0591b8857eeef)
-* [tree-sitter](http://tree-sitter.github.io/tree-sitter/)
-
-## Acknowledgments
+## Credits
 
 * 314eter - handling null characters
 * Aerijo - Guide to your first Tree-sitter grammar
+* ahelwer - tree-sitter discussions
+* ahlinc - tree-sitter work and discussions
 * bakpakin - janet
+* dannyfreeman - tree-sitter-clojure discussions, investigations, and
+  work
 * GrayJack - tree-sitter-janet
 * maxbrunsfeld - tree-sitter and related
+* NoahTheDuke - tree-sitter-clojure discussions and investigations
+* pyrmont - various discussions
+
