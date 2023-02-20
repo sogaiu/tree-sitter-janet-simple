@@ -21,6 +21,15 @@
                "script/make-grammar-js.janet"]
               :p))
 
+(task "corpus-test" ["ensure-tree-sitter" "gen-parser"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  (os/execute ["./bin/tree-sitter"
+               "test"]
+              :p))
+
 (task "dump-lang" ["ensure-tree-sitter"]
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
