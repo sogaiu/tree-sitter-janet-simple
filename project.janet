@@ -21,6 +21,19 @@
                "script/make-grammar-js.janet"]
               :p))
 
+(task "parse" ["ensure-tree-sitter" "gen-parser"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  # XXX: try to be more robust?
+  (def file-path
+    (get (dyn :args) 3))
+  (os/execute ["./bin/tree-sitter"
+               "parse"
+               file-path]
+              :p))
+
 (task "corpus-test" ["ensure-tree-sitter" "gen-parser"]
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
