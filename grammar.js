@@ -140,7 +140,7 @@ module.exports = grammar({
     _radix: $ =>
       token(seq(optional(SIGN),
                 seq(RADIX,
-                    choice('r', 'R'),
+                    'r',
                     ALPHA_NUM,
                     repeat(choice(repeat(ALPHA_NUM),
                                   repeat('_'))),
