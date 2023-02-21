@@ -34,7 +34,7 @@
                file-path]
               :p))
 
-(task "corpus-test" ["ensure-tree-sitter" "gen-parser"]
+(task "corpus-test" ["clean" "ensure-tree-sitter" "gen-parser"]
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
   (os/setenv "TREE_SITTER_LIBDIR"
