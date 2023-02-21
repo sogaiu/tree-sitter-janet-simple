@@ -5,6 +5,11 @@ const DIGIT =
   /[0-9]/;
 const HEX_DIGIT =
   /[0-9A-Fa-f]/;
+const HEX_CHUNK =
+  seq(repeat1(HEX_DIGIT),
+      repeat(seq(repeat("_"),
+                 repeat1(HEX_DIGIT),
+                 repeat("_"))));
 const RADIX =
   choice('2', '3', '4', '5', '6', '7', '8', '9', '10',
          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -122,20 +127,11 @@ module.exports = grammar({
 
     _hex: $ =>
       token(seq(optional(SIGN),
-                '0',
-                'x',
-                choice(seq(repeat1(HEX_DIGIT),
-                           repeat('_'),
-                           optional('.'),
-                           repeat('_'),
-                           repeat(HEX_DIGIT),
-                           repeat('_')),
-                       seq(repeat(HEX_DIGIT),
-                           repeat('_'),
-                           optional('.'),
-                           repeat('_'),
-                           repeat1(HEX_DIGIT),
-                           repeat('_'))))),
+                '0x',
+                choice(HEX_CHUNK,
+                       seq(".", HEX_CHUNK),
+                       seq(HEX_CHUNK, "."),
+                       seq(HEX_CHUNK, ".", HEX_CHUNK)))),
 
     _radix: $ =>
       token(seq(optional(SIGN),
