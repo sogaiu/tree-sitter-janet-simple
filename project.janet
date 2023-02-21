@@ -77,8 +77,24 @@
                "src/tree_sitter"]
               :p))
 
-# XXX: having rustup can help
-(task "ensure-tree-sitter" []
+# XXX: could check versions?
+(task "ensure-rust-bits" []
+  (defn ensure-bin
+    [name]
+    (try
+      (zero? (let [f (file/temp)
+                   r (os/execute ["which" name]
+                                 :px
+                                 {:out f})]
+               (file/close f)
+               r))
+      ([e]
+        (eprintf "%s does not appear to be on PATH" name)
+        false)))
+  (and (ensure-bin "cargo")
+       (ensure-bin "rustc")))
+
+(task "ensure-tree-sitter" ["ensure-rust-bits"]
   (unless (os/stat "tree-sitter/target/release/tree-sitter")
     (def dir (os/cwd))
     (os/execute ["git"
