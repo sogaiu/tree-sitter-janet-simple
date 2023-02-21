@@ -3,6 +3,11 @@ const SIGN =
   choice('-', '+');
 const DIGIT =
   /[0-9]/;
+const DEC_CHUNK =
+  seq(repeat1(DIGIT),
+      repeat(seq(repeat("_"),
+                 repeat1(DIGIT),
+                 repeat("_"))));
 const HEX_DIGIT =
   /[0-9A-Fa-f]/;
 const HEX_CHUNK =
@@ -109,18 +114,17 @@ module.exports = grammar({
 
     _dec: $ =>
       token(seq(optional(SIGN),
-                choice(seq(repeat1(DIGIT),
-                           repeat('_'),
-                           optional('.'),
-                           repeat('_'),
-                           repeat(DIGIT),
-                           repeat('_')),
-                       seq(repeat(DIGIT),
-                           repeat('_'),
-                           optional('.'),
-                           repeat('_'),
-                           repeat1(DIGIT),
-                           repeat('_'))),
+                choice(DEC_CHUNK,
+                       seq(".",
+                           repeat(optional("_")),
+                           DEC_CHUNK),
+                       seq(DEC_CHUNK,
+                           ".",
+                           repeat(optional("_"))),
+                       seq(DEC_CHUNK,
+                           ".",
+                           repeat(optional("_")),
+                           DEC_CHUNK)),
                 optional(seq(choice('e', 'E'),
                              optional(SIGN),
                              repeat1(DIGIT))))),
