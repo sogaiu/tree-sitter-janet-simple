@@ -32,7 +32,7 @@ Integer with Underscores
   (num_lit))
 
 ================================================================================
-Integer with Moar Underscores
+Integer with Sequential Underscores
 ================================================================================
 
 3__0890__100

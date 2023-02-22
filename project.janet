@@ -111,3 +111,8 @@
                 :p)
     (os/cd dir)))
 
+(task "simple-tests" ["ensure-tree-sitter"]
+  (os/execute ["janet"
+               "script/run-simple-tests.janet"]
+              :p))
+
