@@ -34,6 +34,7 @@
   [:regex "["
           "a-zA-Z"
           "!$%&*+./<?=>@^_"
+          "\\u0100-\\uffff"
           "-" # order matters here
           "]"]
 
@@ -42,6 +43,7 @@
           "0-9:"
           "a-zA-Z"
           "!$%&*+./<?=>@^_"
+          "\\u0100-\\uffff"
           "-" # order matters here
           "]"]
 

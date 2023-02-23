@@ -27,10 +27,10 @@ const ALPHA_NUM =
 // janet/tools/symcharsgen.c
 // XXX: missing unicode characters
 const SYM_CHAR_NO_DIGIT_NO_COLON =
-  /[a-zA-Z!$%&*+./<?=>@^_-]/;
+  /[a-zA-Z!$%&*+./<?=>@^_\u0100-\uffff-]/;
 // XXX: missing unicode characters
 const SYM_CHAR =
-  /[0-9:a-zA-Z!$%&*+./<?=>@^_-]/;
+  /[0-9:a-zA-Z!$%&*+./<?=>@^_\u0100-\uffff-]/;
 
 // strings
 const STRING_DOUBLE_QUOTE_CONTENT =
