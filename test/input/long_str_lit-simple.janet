@@ -1,0 +1,2 @@
+`A nice
+long-string`
