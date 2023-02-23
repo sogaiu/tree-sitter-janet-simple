@@ -1322,7 +1322,7 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "\\s|\\x0b|\\x0c|\\x00"
+      "value": "\\x00|\\x09|\\x0a|\\x0b|\\x0c|\\x0d|\\x20"
     },
     {
       "type": "SYMBOL",

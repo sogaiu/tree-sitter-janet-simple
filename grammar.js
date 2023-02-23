@@ -48,7 +48,7 @@ module.exports = grammar({
   // for example, leaving out \x0b, \x0c, or \x00 from the following yields
   // different behavior (other stuff may also differ)
   extras: $ => [
-    /\s|\x0b|\x0c|\x00/,
+    /\x00|\x09|\x0a|\x0b|\x0c|\x0d|\x20/,
     $.comment
   ],
 

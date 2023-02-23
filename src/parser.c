@@ -459,8 +459,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
           lookahead == '^' ||
           lookahead == '_' ||
           ('a' <= lookahead && lookahead <= 'z') ||
-          (256 <= lookahead && lookahead <= 55295) ||
-          (57344 <= lookahead && lookahead <= 65535)) ADVANCE(81);
+          (256 <= lookahead && lookahead <= 4095)) ADVANCE(81);
       END_STATE();
     case 1:
       if (lookahead == '"') ADVANCE(57);
