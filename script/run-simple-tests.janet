@@ -38,6 +38,8 @@
 
   (def actual @"")
 
+  (def expected @"")
+
   (var last-end 0)
 
   (def src-paths
@@ -54,6 +56,9 @@
   (printf "1..%d" (length src-paths))
 
   (each fp src-paths
+
+    (buffer/clear actual)
+    (buffer/clear expected)
 
     # result may be set to return value of deep= below
     # which is true or false - nil means test skipped
@@ -112,9 +117,7 @@
         (deep= actual expected))
 
       (deprintf "actual: %M" actual)
-      (deprintf "expected: %M" expected)
-
-      (buffer/clear actual))
+      (deprintf "expected: %M" expected))
 
     (cond
       (true? result)
