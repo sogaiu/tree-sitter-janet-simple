@@ -20,6 +20,36 @@
   [n]
   (printf "TAP Version %d" n))
 
+(defn indent
+  [buf n]
+  (when (not (pos? (length buf)))
+    (break buf))
+  #
+  (def nl-spaces
+    (buffer/push @"\n"
+                 ;(map |(do $ " ")
+                       (range 0 n))))
+  (def indented
+    (buffer/push (buffer/new-filled n (chr " "))
+                 buf))
+  # XXX: not so efficient, but good enough?
+  (string/replace-all "\n"
+                      nl-spaces
+                      indented))
+
+(comment
+
+  (def src
+    @``
+     (source [0, 0] - [1, 0]
+       (kwd_lit [0, 0] - [0, 8]))
+     ``)
+
+  (indent src 2)
+  # =>
+
+  )
+
 ########################################################################
 
 (defn run-tests
@@ -110,8 +140,9 @@
 
       (deprintf "length read: %d" (length actual))
 
-      (def expected
-        (slurp expected-fp))
+      (def ef (file/open expected-fp))
+      (file/read ef :all expected)
+      (file/close ef)
 
       (set result
         (deep= actual expected))
@@ -129,6 +160,12 @@
       (do
         (printf "not ok %d - %s"
                 (inc i) input-fp)
+        (printf "  ---")
+        (printf "  found:")
+        (printf "%s" (indent (string/trim actual) 4))
+        (printf "  wanted:")
+        (printf "%s" (indent (string/trim expected) 4))
+        (printf "  ...")
         (array/push stats [i :not-ok]))
       #
       (nil? result)
