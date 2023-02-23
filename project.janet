@@ -11,6 +11,10 @@
 
 (def proj-dir (os/cwd))
 
+(put (dyn :rules) "test" nil)
+(task "test" []
+  (print "Sorry, no tests here, try `jpm tasks`."))
+
 (task "gen-grammar-json" []
   (os/execute ["janet"
                "script/make-grammar-json.janet"]
