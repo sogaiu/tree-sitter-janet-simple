@@ -1,4 +1,4 @@
-(def test-corpus-dir
+(def corpus-dir
   "test/corpus")
 
 (def input-files-dir
@@ -84,4 +84,4 @@
 
       )))
 
-(convert test-corpus-dir input-files-dir)
+(convert corpus-dir input-files-dir)
