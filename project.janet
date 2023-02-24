@@ -123,26 +123,34 @@
 ## parsing tasks
 
 (task "parse" ["ensure-tree-sitter" "gen-parser"]
+  (def file-path
+    (let [from-args (get (dyn :args) 3)]
+      (assert (= :file
+                 (os/stat from-args :mode))
+              (string/format "need a file-path as an argument: %s"
+                             from-args))
+      from-args))
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
   (os/setenv "TREE_SITTER_LIBDIR"
              (string proj-dir "/.tree-sitter/lib"))
-  # XXX: try to be more robust?
-  (def file-path
-    (get (dyn :args) 3))
   (os/execute ["./bin/tree-sitter"
                "parse"
                file-path]
               :p))
 
 (task "ts-parse" ["ensure-tree-sitter" "ts-gen-parser"]
+  (def file-path
+    (let [from-args (get (dyn :args) 3)]
+      (assert (= :file
+                 (os/stat from-args :mode))
+              (string/format "need a file-path as an argument: %s"
+                             from-args))
+      from-args))
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
   (os/setenv "TREE_SITTER_LIBDIR"
              (string proj-dir "/.tree-sitter/lib"))
-  # XXX: try to be more robust?
-  (def file-path
-    (get (dyn :args) 3))
   (os/execute ["./bin/tree-sitter"
                "parse"
                file-path]
