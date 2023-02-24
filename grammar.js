@@ -1,15 +1,19 @@
+function regex(patt) {
+  return RegExp(patt);
+}
+
 // numbers
 const SIGN =
   choice('-', '+');
 const DIGIT =
-  /[0-9]/;
+  regex("[0-9]");
 const DEC_CHUNK =
   seq(repeat1(DIGIT),
       repeat(seq(repeat("_"),
                  repeat1(DIGIT),
                  repeat("_"))));
 const HEX_DIGIT =
-  /[0-9A-Fa-f]/;
+  regex("[0-9A-Fa-f]");
 const HEX_CHUNK =
   seq(repeat1(HEX_DIGIT),
       repeat(seq(repeat("_"),
@@ -21,33 +25,43 @@ const RADIX =
          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
          '31', '32', '33', '34', '35', '36');
 const ALPHA_NUM =
-  /[a-zA-Z0-9]/;
+  regex("[a-zA-Z0-9]");
 
 // symbols and keywords
 const SYM_CHAR_NO_DIGIT_NO_COLON =
-  /[a-zA-Z!$%&*+./<?=>@^_\u0100-\uffff-]/;
-// XXX: missing unicode characters
+  regex("[" +
+        "a-zA-Z" +
+        "!$%&*+./<?=>@^_" +
+        "\u{0100}-\u{10ffff}" +
+        "-" + // order matters here
+        "]");
 // see is_symbol_char_gen in janet's tools/symcharsgen.c
 const SYM_CHAR =
-  /[0-9:a-zA-Z!$%&*+./<?=>@^_\u0100-\uffff-]/;
+  regex("[" +
+        "0-9:" +
+        "a-zA-Z" +
+        "!$%&*+./<?=>@^_" +
+        "\u{0100}-\u{10ffff}" +
+        "-" + // order matters here
+        "]");
 
 // strings
 const STRING_DOUBLE_QUOTE_CONTENT =
-  repeat(choice(/[^\\"]/,
-                /\\(.|\n)/)); // thanks to tree-sitter-haskell
+  repeat(choice(regex("[^" +
+                      "\\\\" +
+                      "\"" +
+                      "]"),
+                regex("\\\\" +
+                      "(.|\\n)"))); // thanks to tree-sitter-haskell
 
 module.exports = grammar({
   name: 'janet_simple',
 
-  // mdn says \s is:
-  //
-  //   [ \f\n\r\t\v\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]
-  //
-  // but that doesn't seem to match what tree-sitter thinks as it appears that
-  // for example, leaving out \x0b, \x0c, or \x00 from the following yields
-  // different behavior (other stuff may also differ)
   extras: $ => [
-    /\x00|\x09|\x0a|\x0b|\x0c|\x0d|\x20/,
+    // see is_whitespace in janet's parser.c
+    regex("\x00|" +
+          "\x09|\x0a|\x0b|\x0c|\x0d|" +
+          "\x20"),
     $.comment
   ],
 
@@ -62,7 +76,7 @@ module.exports = grammar({
       repeat($._lit),
 
     comment: $ =>
-      /#.*/,
+      regex("#.*"),
 
     _lit: $ =>
       choice($.bool_lit,

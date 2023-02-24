@@ -35,7 +35,7 @@
   [:regex "["
           "a-zA-Z"
           "!$%&*+./<?=>@^_"
-          "\\u0100-\\uffff"
+          "Ā-􏿿" # 0100 - 10ffff
           "-" # order matters here
           "]"]
 
@@ -45,13 +45,17 @@
           "0-9:"
           "a-zA-Z"
           "!$%&*+./<?=>@^_"
-          "\\u0100-\\uffff"
+          "Ā-􏿿" # 0100 - 10ffff
           "-" # order matters here
           "]"]
 
   :STRING_DOUBLE_QUOTE_CONTENT
-  [:repeat [:choice [:regex "[^" "\\\\" "\"" "]"]
-                    [:regex "\\\\(.|\\n)"]]]
+  [:repeat [:choice [:regex "[^"
+                            "\\\\"
+                            "\""
+                            "]"]
+                    [:regex "\\\\"
+                            "(.|\\n)"]]]
 
   ]
 
