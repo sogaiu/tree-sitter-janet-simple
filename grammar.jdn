@@ -1,5 +1,6 @@
 [:name "janet_simple"
 
+ # see is_whitespace in janet's parser.c
  :extras [[:regex "\\x00|\\x09|\\x0a|\\x0b|\\x0c|\\x0d|\\x20"]
           :comment]
 
@@ -38,6 +39,7 @@
           "-" # order matters here
           "]"]
 
+  # see is_symbol_char_gen in janet's tools/symcharsgen.c
   :SYM_CHAR
   [:regex "["
           "0-9:"
