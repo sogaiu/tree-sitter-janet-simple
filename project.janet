@@ -15,6 +15,25 @@
 (task "test" []
   (print "Sorry, no tests here, try `jpm tasks`."))
 
+## cleanup tasks
+
+(task "clean-src" []
+  (os/execute ["rm" "-rf"
+               "src/parser.c"
+               "src/grammar.json"
+               "src/node-types.json"
+               "src/tree_sitter"]
+              :p))
+
+(task "clean-dot-ts" []
+  (os/execute ["rm" "-rf"
+               ".tree-sitter/lib/janet_simple.so"]
+              :p))
+
+(task "clean" ["clean-src" "clean-dot-ts"])
+
+## grammar generation tasks
+
 (task "gen-grammar-json" []
   (os/execute ["janet"
                "script/make-grammar-json.janet"]
@@ -25,61 +44,7 @@
                "script/make-grammar-js.janet"]
               :p))
 
-(task "parse" ["ensure-tree-sitter" "gen-parser"]
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  # XXX: try to be more robust?
-  (def file-path
-    (get (dyn :args) 3))
-  (os/execute ["./bin/tree-sitter"
-               "parse"
-               file-path]
-              :p))
-
-(task "corpus-test" ["clean" "ensure-tree-sitter" "gen-parser"]
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  (os/execute ["./bin/tree-sitter"
-               "test"]
-              :p))
-
-(task "dump-lang" ["ensure-tree-sitter"]
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  (os/execute ["./bin/tree-sitter"
-               "dump-languages"]
-              :p))
-
-(task "gen-parser" ["ensure-tree-sitter" "gen-grammar-json"]
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  (os/execute ["./bin/tree-sitter"
-               "generate"
-               "--abi" ts-abi
-               "--no-bindings"
-               "grammar.json"]
-              :p)
-  (os/execute ["cp"
-               "grammar.json"
-               "src/grammar.json"]
-              :p))
-
-(task "clean" []
-  (os/execute ["rm"
-               "-rf"
-               "src/parser.c"
-               "src/grammar.json"
-               "src/node-types.json"
-               "src/tree_sitter"]
-              :p))
+## rust tooling and tree-sitter cli existence tasks
 
 # XXX: could check versions?
 (task "ensure-rust-bits" []
@@ -115,7 +80,86 @@
                 :p)
     (os/cd dir)))
 
-(task "simple-tests" ["ensure-tree-sitter" "gen-parser"]
+## diagnostic tasks
+
+(task "dump-lang" ["ensure-tree-sitter"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  (os/execute ["./bin/tree-sitter"
+               "dump-languages"]
+              :p))
+
+## parser generation tasks
+
+(task "gen-parser" ["ensure-tree-sitter" "gen-grammar-json"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  (os/execute ["./bin/tree-sitter"
+               "generate"
+               "--abi" ts-abi
+               "--no-bindings"
+               "grammar.json"]
+              :p)
+  (os/execute ["cp"
+               "grammar.json"
+               "src/grammar.json"]
+              :p))
+
+(task "ts-gen-parser" ["clean" "ensure-tree-sitter"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  (os/execute ["./bin/tree-sitter"
+               "generate"
+               "--abi" ts-abi
+               "--no-bindings"]
+              :p))
+
+## parsing tasks
+
+(task "parse" ["ensure-tree-sitter" "gen-parser"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  # XXX: try to be more robust?
+  (def file-path
+    (get (dyn :args) 3))
+  (os/execute ["./bin/tree-sitter"
+               "parse"
+               file-path]
+              :p))
+
+(task "ts-parse" ["ensure-tree-sitter" "ts-gen-parser"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  # XXX: try to be more robust?
+  (def file-path
+    (get (dyn :args) 3))
+  (os/execute ["./bin/tree-sitter"
+               "parse"
+               file-path]
+              :p))
+
+## testing tasks
+
+(task "corpus-test" ["clean" "ensure-tree-sitter" "ts-gen-parser"]
+  (os/setenv "TREE_SITTER_DIR"
+             (string proj-dir "/.tree-sitter"))
+  (os/setenv "TREE_SITTER_LIBDIR"
+             (string proj-dir "/.tree-sitter/lib"))
+  (os/execute ["./bin/tree-sitter"
+               "test"]
+              :p))
+
+(task "simple-tests" ["clean" "ensure-tree-sitter" "gen-parser"]
   (os/execute ["janet"
                "script/run-simple-tests.janet"]
               :p))
