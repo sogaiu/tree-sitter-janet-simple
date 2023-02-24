@@ -63,6 +63,7 @@ Used to provide but no longer do:
 * Aerijo - Guide to your first Tree-sitter grammar
 * ahelwer - tree-sitter discussions
 * ahlinc - tree-sitter work and discussions
+* andrewchambers - janet-uri
 * bakpakin - janet
 * dannyfreeman - tree-sitter-clojure discussions, investigations, and
   work

@@ -172,3 +172,12 @@
                "script/run-simple-tests.janet"]
               :p))
 
+(task "fetch-some-janet-code" []
+  (def n
+    (if-let [from-args (get (dyn :args) 3)]
+      from-args
+      3))
+  (os/execute ["janet"
+               "script/fetch-git-repositories.janet"
+               (string n)]
+              :p))
