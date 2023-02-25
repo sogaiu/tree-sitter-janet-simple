@@ -181,3 +181,8 @@
                "script/fetch-git-repositories.janet"
                (string n)]
               :p))
+
+(task "real-world-code-test" ["fetch-some-janet-code"]
+  (os/execute ["janet"
+               "script/parse-tree.janet"]
+              :p))

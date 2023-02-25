@@ -395,5 +395,9 @@
          exit-code results-for-code))
   #
   (when (not (empty? results))
-    (printf "%M" results)))
+    (printf "%M" results)
+    (printf "Successfully fetched repos: %d" (length (get results 0)))
+    (eachk ret results
+      (when (not (zero? ret))
+        (printf "Error code %d: %d" (length (get results ret)))))))
 
