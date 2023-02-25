@@ -1,11 +1,4 @@
-(def corpus-dir
-  "test/corpus")
-
-(def input-files-dir
-  "test/input")
-
-(def expected-files-dir
-  "test/expected")
+(import ../conf/common-paths :prefix "")
 
 ########################################################################
 

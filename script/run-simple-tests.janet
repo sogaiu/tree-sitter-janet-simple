@@ -1,18 +1,6 @@
-(def ts-bin-path
-  "bin/tree-sitter")
-
-(def input-files-dir
-  "test/input")
-
-(def expected-files-dir
-  "test/expected")
+(import ../conf/common-paths :prefix "")
 
 ########################################################################
-
-(defn deprintf
-  [fmt & args]
-  (when (os/getenv "VERBOSE")
-    (eprintf fmt ;args)))
 
 (def tap-version 14)
 
@@ -47,6 +35,10 @@
 
   (indent src 2)
   # =>
+  ``
+    (source [0, 0] - [1, 0]
+      (kwd_lit [0, 0] - [0, 8]))
+  ``
 
   )
 
@@ -63,11 +55,9 @@
 
   (var i 0)
 
-  (def tf
-    (file/temp))
+  (def tf (file/temp))
 
   (def actual @"")
-
   (def expected @"")
 
   (var last-end 0)
@@ -120,8 +110,6 @@
                     :p
                     {:out tf}))
 
-      (deprintf "os/execute returned: %d" ret)
-
       (file/flush tf)
 
       (def pos
@@ -130,25 +118,18 @@
       (def n-bytes
         (- pos last-end))
 
-      (deprintf "bytes read according to tell: %d" n-bytes)
-
       (file/seek tf :set last-end)
 
       (set last-end pos)
 
       (file/read tf n-bytes actual)
 
-      (deprintf "length read: %d" (length actual))
-
       (def ef (file/open expected-fp))
       (file/read ef :all expected)
       (file/close ef)
 
       (set result
-        (deep= actual expected))
-
-      (deprintf "actual: %M" actual)
-      (deprintf "expected: %M" expected))
+        (deep= actual expected)))
 
     (cond
       (true? result)

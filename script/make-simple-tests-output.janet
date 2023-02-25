@@ -1,11 +1,4 @@
-(def ts-bin-path
-  "bin/tree-sitter")
-
-(def input-files-dir
-  "test/input")
-
-(def output-files-dir
-  "test/output")
+(import ../conf/common-paths :prefix "")
 
 ########################################################################
 
