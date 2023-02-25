@@ -394,5 +394,6 @@
     (put results
          exit-code results-for-code))
   #
-  (printf "%M" results))
+  (when (not (empty? results))
+    (printf "%M" results)))
 
