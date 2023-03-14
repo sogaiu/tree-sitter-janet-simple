@@ -4,8 +4,8 @@
   :url "https://github.com/sogaiu/tree-sitter-janet-simple"
   :repo "git+https://github.com/sogaiu/tree-sitter-janet-simple")
 
-(def ts-sha
-  "c51896d32dcc11a38e41f36e3deb1a6a9c4f4b14")
+(def ts-ref
+  "v0.20.8")
 
 (def ts-abi (string 13))
 
@@ -72,7 +72,7 @@
                 :p)
     (os/cd "tree-sitter")
     (os/execute ["git"
-                 "checkout" ts-sha]
+                 "checkout" ts-ref]
                 :p)
     (os/execute ["cargo"
                  "build"
