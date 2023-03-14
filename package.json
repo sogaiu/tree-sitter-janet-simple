@@ -6,6 +6,7 @@
     {
       "scope": "source.janet",
       "file-types": [
+        "cgen",
         "janet",
         "jdn"
       ]
