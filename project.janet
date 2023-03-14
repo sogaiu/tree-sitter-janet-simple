@@ -186,7 +186,10 @@
                (string n)]
               :p))
 
-(task "real-world-code-test" ["fetch-some-janet-code"]
+(task "real-world-code-test" ["clean"
+                              "ensure-tree-sitter"
+                              "ts-gen-parser"
+                              "fetch-some-janet-code"]
   (os/execute ["janet"
                "script/parse-tree.janet"]
               :p))
