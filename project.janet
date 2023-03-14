@@ -158,7 +158,9 @@
 
 ## testing tasks
 
-(task "corpus-test" ["clean" "ensure-tree-sitter" "ts-gen-parser"]
+(task "corpus-test" ["clean"
+                     "ensure-tree-sitter"
+                     "ts-gen-parser"]
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
   (os/setenv "TREE_SITTER_LIBDIR"
@@ -167,7 +169,9 @@
                "test"]
               :p))
 
-(task "simple-tests" ["clean" "ensure-tree-sitter" "gen-parser"]
+(task "simple-tests" ["clean"
+                      "ensure-tree-sitter"
+                      "gen-parser"]
   (os/execute ["janet"
                "script/run-simple-tests.janet"]
               :p))
