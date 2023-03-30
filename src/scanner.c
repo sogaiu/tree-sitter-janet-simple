@@ -70,7 +70,7 @@ bool tree_sitter_janet_simple_external_scanner_scan(
     uint32_t n_backticks = 1;
     // arrive at a total number of backticks
     for (;;) {
-      if (lexer->lookahead == 0) {
+      if (lexer->eof(lexer)) {
         return false;
       }
       // found one!
@@ -87,7 +87,7 @@ bool tree_sitter_janet_simple_external_scanner_scan(
     // now keep looking until n_backticks are found
     uint32_t cbt = 0; // consecutive backticks
     for (;;) {
-      if (lexer->lookahead == 0) {
+      if (lexer->eof(lexer)) {
         return false;
       }
       // found one!
