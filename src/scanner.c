@@ -60,7 +60,9 @@ bool tree_sitter_janet_simple_external_scanner_scan(
     } else {
       lexer->result_symbol = LONG_STR_LIT;
     }
-    // long strings start with one or more backticks
+    // * long strings start with one or more backticks
+    // * for a long buffer, the leading @ has been skipped (see above)
+    //   to arrive at the first backtick
     // consume the first backtick
     if (lexer->lookahead != '`') {
       return false;
