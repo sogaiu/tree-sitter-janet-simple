@@ -70,6 +70,7 @@ my belief is that there is room in the world for multiple attempts
 * dannyfreeman - tree-sitter-clojure discussions, investigations, and
   work
 * GrayJack - tree-sitter-janet
+* Grazfather - `short_fn_lit` discussion
 * maxbrunsfeld - tree-sitter and related
 * NoahTheDuke - tree-sitter-clojure discussions and investigations
 * pyrmont - various discussions

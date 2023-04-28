@@ -218,15 +218,22 @@ module.exports = grammar({
           $._lit),
 
     // following all work at the repl..
-    //   |8, ||8, |||8, etc.
-    //   |~(:x)
-    //   |{:a 1}
-    //   |[1 2]
-    //   |"a"
-    //   |:w
-    //   |a-sym
-    //   |@[8 9]
     //   |(= $ 1)
+    //   |[1 2]
+    //   |@[8 9]
+    //   |@(:fun :time)
+    //   |{:a 1}
+    //   |@{:pose :sit}
+    //   |'(0)
+    //   |~(:x)
+    //   |:kwd
+    //   |a-sym
+    //   |"a-str"
+    //   |@"buffer"
+    //   |``long-string``
+    //   |@``long-buffer``
+    //   |8
+    //   ||8, |||8, etc.
     // XXX: |() doesn't work...but don't bother disallowing
     short_fn_lit: $ =>
       seq('|',
