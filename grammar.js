@@ -232,6 +232,8 @@ module.exports = grammar({
     //   |@"buffer"
     //   |``long-string``
     //   |@``long-buffer``
+    //   |false
+    //   |nil
     //   |8
     //   ||8, |||8, etc.
     // XXX: |() doesn't work...but don't bother disallowing
