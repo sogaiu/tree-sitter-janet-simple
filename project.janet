@@ -5,7 +5,7 @@
   :repo "git+https://github.com/sogaiu/tree-sitter-janet-simple")
 
 (def ts-ref
-  "v0.20.8")
+  "46af27796a76c72d8466627d499f2bca4af958ee")
 
 (def ts-abi (string 13))
 

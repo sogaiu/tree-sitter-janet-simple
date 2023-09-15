@@ -1,6 +1,18 @@
-function regex(patt) {
-  return RegExp(patt);
+function regex(...patts) {
+  return RegExp(patts.join(""));
 }
+
+// see is_whitespace in janet's parser.c
+const WHITESPACE_CHAR =
+  regex("\x00|",
+        "\x09|\x0a|\x0b|\x0c|\x0d|",
+        "\x20");
+
+const WHITESPACE =
+  token(repeat1(WHITESPACE_CHAR));
+
+const COMMENT =
+  token(regex("#.*\n?"));
 
 // numbers
 const SIGN =
@@ -29,41 +41,36 @@ const ALPHA_NUM =
 
 // symbols and keywords
 const SYM_CHAR_NO_DIGIT_NO_COLON =
-  regex("[" +
-        "a-zA-Z" +
-        "!$%&*+./<?=>@^_" +
-        "\u{0100}-\u{10ffff}" +
-        "-" + // order matters here
+  regex("[",
+        "a-zA-Z",
+        "!$%&*+./<?=>@^_",
+        "\u{0100}-\u{10ffff}",
+        "-", // order matters here
         "]");
 // see is_symbol_char_gen in janet's tools/symcharsgen.c
 const SYM_CHAR =
-  regex("[" +
-        "0-9:" +
-        "a-zA-Z" +
-        "!$%&*+./<?=>@^_" +
-        "\u{0100}-\u{10ffff}" +
-        "-" + // order matters here
+  regex("[",
+        "0-9:",
+        "a-zA-Z",
+        "!$%&*+./<?=>@^_",
+        "\u{0100}-\u{10ffff}",
+        "-", // order matters here
         "]");
 
 // strings
 const STRING_DOUBLE_QUOTE_CONTENT =
-  repeat(choice(regex("[^" +
-                      "\\\\" +
-                      "\"" +
+  repeat(choice(regex("[^",
+                      "\\\\",
+                      "\"",
                       "]"),
-                regex("\\\\" +
+                regex("\\\\",
                       "(.|\\n)"))); // thanks to tree-sitter-haskell
 
 module.exports = grammar({
   name: 'janet_simple',
 
-  extras: $ => [
-    // see is_whitespace in janet's parser.c
-    regex("\x00|" +
-          "\x09|\x0a|\x0b|\x0c|\x0d|" +
-          "\x20"),
-    $.comment
-  ],
+  extras: $ =>
+    [],
 
   externals: $ => [
     $.long_buf_lit,
@@ -73,10 +80,24 @@ module.exports = grammar({
   rules: {
     // THIS MUST BE FIRST -- even though this doesn't look like it matters
     source: $ =>
-      repeat($._lit),
+      repeat(choice($._lit,
+                    $._gap)),
+
+    _gap: $ =>
+      choice($._ws,
+             $.comment,
+             $.dis_expr),
+
+    _ws: $ =>
+      WHITESPACE,
 
     comment: $ =>
-      regex("#.*"),
+      COMMENT,
+
+    dis_expr: $ =>
+      seq("\\#",
+          repeat($._gap),
+          $._lit),
 
     _lit: $ =>
       choice($.bool_lit,
@@ -179,42 +200,44 @@ module.exports = grammar({
 
     par_arr_lit: $ =>
       seq('@(',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           ')'),
 
     sqr_arr_lit: $ =>
       seq('@[',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           ']'),
 
     struct_lit: $ =>
       seq('{',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           '}'),
 
     tbl_lit: $ =>
       seq('@{',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           '}'),
 
     par_tup_lit: $ =>
       seq('(',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           ')'),
 
     sqr_tup_lit: $ =>
       seq('[',
-          repeat($._lit),
+          repeat(choice($._lit, $._gap)),
           ']'),
 
     // macro-related
 
     qq_lit: $ =>
       seq('~',
+          repeat($._gap),
           $._lit),
 
     quote_lit: $ =>
       seq("'",
+          repeat($._gap),
           $._lit),
 
     // following all work at the repl..
@@ -239,15 +262,18 @@ module.exports = grammar({
     // XXX: |() doesn't work...but don't bother disallowing
     short_fn_lit: $ =>
       seq('|',
+          repeat($._gap),
           $._lit),
 
     // XXX: ?
     splice_lit: $ =>
       seq(';',
+          repeat($._gap),
           $._lit),
 
     unquote_lit: $ =>
       seq(',',
+          repeat($._gap),
           $._lit),
 
   }

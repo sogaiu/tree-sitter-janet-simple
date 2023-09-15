@@ -1,13 +1,19 @@
 [:name "janet_simple"
 
  # see is_whitespace in janet's parser.c
- :extras [[:regex "\\x00|\\x09|\\x0a|\\x0b|\\x0c|\\x0d|\\x20"]
-          :comment]
+ :extras []
 
  :externals [:long_buf_lit :long_str_lit]
 
  :_tokens
- [:SIGN [:choice "-" "+"]
+ [:WHITESPACE_CHAR
+  [:regex "\\x00|\\x09|\\x0a|\\x0b|\\x0c|\\x0d|\\x20"]
+
+  :WHITESPACE [:token [:repeat1 :WHITESPACE_CHAR]]
+
+  :COMMENT [:token [:regex "#.*\\n?"]]
+
+  :SIGN [:choice "-" "+"]
 
   :DIGIT [:regex "[0-9]"]
 
@@ -60,9 +66,20 @@
   ]
 
  :rules
- [:source [:repeat :_lit]
+ [:source [:repeat [:choice :_lit
+                            :_gap]]
 
-  :comment [:regex "#.*"]
+  :_gap [:choice :_ws
+                 :comment
+                 :dis_expr]
+
+  :_ws :WHITESPACE
+
+  :comment :COMMENT
+
+  :dis_expr [:seq "\\#"
+             [:repeat :_gap]
+             :_lit]
 
   :_lit [:choice :bool_lit
                  :buf_lit
@@ -150,27 +167,27 @@
   :sym_lit [:token [:seq :SYM_CHAR_NO_DIGIT_NO_COLON
                          [:repeat :SYM_CHAR]]]
 
-  :par_arr_lit [:seq "@(" [:repeat :_lit] ")"]
+  :par_arr_lit [:seq "@(" [:repeat [:choice :_lit :_gap]] ")"]
 
-  :sqr_arr_lit [:seq "@[" [:repeat :_lit] "]"]
+  :sqr_arr_lit [:seq "@[" [:repeat [:choice :_lit :_gap]] "]"]
 
-  :struct_lit [:seq "{" [:repeat :_lit] "}"]
+  :struct_lit [:seq "{" [:repeat [:choice :_lit :_gap]] "}"]
 
-  :tbl_lit [:seq "@{" [:repeat :_lit] "}"]
+  :tbl_lit [:seq "@{" [:repeat [:choice :_lit :_gap]] "}"]
 
-  :par_tup_lit [:seq "(" [:repeat :_lit] ")"]
+  :par_tup_lit [:seq "(" [:repeat [:choice :_lit :_gap]] ")"]
 
-  :sqr_tup_lit [:seq "[" [:repeat :_lit] "]"]
+  :sqr_tup_lit [:seq "[" [:repeat [:choice :_lit :_gap]] "]"]
 
-  :qq_lit [:seq "~" :_lit]
+  :qq_lit [:seq "~" [:repeat :_gap] :_lit]
 
-  :quote_lit [:seq "'" :_lit]
+  :quote_lit [:seq "'" [:repeat :_gap] :_lit]
 
-  :short_fn_lit [:seq "|" :_lit]
+  :short_fn_lit [:seq "|" [:repeat :_gap] :_lit]
 
-  :splice_lit [:seq ";" :_lit]
+  :splice_lit [:seq ";" [:repeat :_gap] :_lit]
 
-  :unquote_lit [:seq "," :_lit]
+  :unquote_lit [:seq "," [:repeat :_gap] :_lit]
 
   ]
 
