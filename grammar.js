@@ -127,17 +127,8 @@ module.exports = grammar({
 
     _dec: $ =>
       token(seq(optional(SIGN),
-                choice(DEC_CHUNK,
-                       seq(".",
-                           repeat(optional("_")),
-                           DEC_CHUNK),
-                       seq(DEC_CHUNK,
-                           ".",
-                           repeat(optional("_"))),
-                       seq(DEC_CHUNK,
-                           ".",
-                           repeat(optional("_")),
-                           DEC_CHUNK)),
+                choice(seq(optional("."), DEC_CHUNK),
+                       seq(DEC_CHUNK, ".", optional(DEC_CHUNK))),
                 optional(seq(choice('e', 'E'),
                              optional(SIGN),
                              repeat1(DIGIT))))),
@@ -145,10 +136,8 @@ module.exports = grammar({
     _hex: $ =>
       token(seq(optional(SIGN),
                 '0x',
-                choice(HEX_CHUNK,
-                       seq(".", HEX_CHUNK),
-                       seq(HEX_CHUNK, "."),
-                       seq(HEX_CHUNK, ".", HEX_CHUNK)))),
+                choice(seq(optional("."), HEX_CHUNK),
+                       seq(HEX_CHUNK, ".", optional(HEX_CHUNK))))),
 
     _radix: $ =>
       token(seq(optional(SIGN),
