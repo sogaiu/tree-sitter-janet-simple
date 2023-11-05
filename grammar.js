@@ -138,7 +138,7 @@ module.exports = grammar({
                        seq(RADIX_CHUNK, ".", optional(RADIX_CHUNK))),
                 optional(seq('&',
                              optional(SIGN),
-                             repeat1(DIGIT))))),
+                             repeat1(ALPHA_NUM))))),
 
     _hex: $ =>
       token(seq(optional(SIGN),
