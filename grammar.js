@@ -26,6 +26,11 @@ const RADIX =
          '31', '32', '33', '34', '35', '36');
 const ALPHA_NUM =
   regex("[a-zA-Z0-9]");
+const RADIX_CHUNK =
+  seq(repeat1(ALPHA_NUM),
+      repeat(seq(repeat("_"),
+                 repeat1(ALPHA_NUM),
+                 repeat("_"))));
 
 // symbols and keywords
 const SYM_CHAR_NO_DIGIT_NO_COLON =
@@ -121,15 +126,17 @@ module.exports = grammar({
 
     num_lit: $ =>
       prec(5,
-           choice($._dec,
+           choice($._radix,
                   $._hex,
-                  $._radix)),
+		  $._dec)),
 
-    _dec: $ =>
+    _radix: $ =>
       token(seq(optional(SIGN),
-                choice(seq(optional("."), DEC_CHUNK),
-                       seq(DEC_CHUNK, ".", optional(DEC_CHUNK))),
-                optional(seq(choice('e', 'E'),
+                RADIX,
+                'r',
+                choice(seq(optional("."), RADIX_CHUNK),
+                       seq(RADIX_CHUNK, ".", optional(RADIX_CHUNK))),
+                optional(seq('&',
                              optional(SIGN),
                              repeat1(DIGIT))))),
 
@@ -139,16 +146,13 @@ module.exports = grammar({
                 choice(seq(optional("."), HEX_CHUNK),
                        seq(HEX_CHUNK, ".", optional(HEX_CHUNK))))),
 
-    _radix: $ =>
+    _dec: $ =>
       token(seq(optional(SIGN),
-                seq(RADIX,
-                    'r',
-                    ALPHA_NUM,
-                    repeat(choice(repeat(ALPHA_NUM),
-                                  repeat('_'))),
-                    optional(seq('&',
-                                 optional(SIGN),
-                                 repeat1(DIGIT)))))),
+                choice(seq(optional("."), DEC_CHUNK),
+                       seq(DEC_CHUNK, ".", optional(DEC_CHUNK))),
+                optional(seq(choice('e', 'E'),
+                             optional(SIGN),
+                             repeat1(DIGIT))))),
 
     str_lit: $ =>
       token(seq('"',
