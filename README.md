@@ -10,9 +10,6 @@ Usable, but as tree-sitter is pre-1.0, don't forget the salt.
 
 This repository currently provides "source" files such as:
 
-* `grammar.jdn` - can be used to generate a `grammar.js` and/or
-  `grammar.json` if one uses
-  [janet-ts-dsl](https://github.com/sogaiu/janet-ts-dsl)
 * `grammar.js` - can be used to generate `parser.c` using the
   `tree-sitter` `generate` subcommand, but `node` is then required
 * `package.json` - without this file, the `tree-sitter` cli's
