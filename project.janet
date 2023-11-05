@@ -32,18 +32,6 @@
 
 (task "clean" ["clean-src" "clean-dot-ts"])
 
-## grammar generation tasks
-
-(task "gen-grammar-json" []
-  (os/execute ["janet"
-               "script/make-grammar-json.janet"]
-              :p))
-
-(task "gen-grammar-js" []
-  (os/execute ["janet"
-               "script/make-grammar-js.janet"]
-              :p))
-
 ## rust tooling and tree-sitter cli existence tasks
 
 # XXX: could check versions?
@@ -93,22 +81,6 @@
 
 ## parser generation tasks
 
-(task "gen-parser" ["ensure-tree-sitter" "gen-grammar-json"]
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  (os/execute ["./bin/tree-sitter"
-               "generate"
-               "--abi" ts-abi
-               "--no-bindings"
-               "grammar.json"]
-              :p)
-  (os/execute ["cp"
-               "grammar.json"
-               "src/grammar.json"]
-              :p))
-
 (task "ts-gen-parser" ["clean" "ensure-tree-sitter"]
   (os/setenv "TREE_SITTER_DIR"
              (string proj-dir "/.tree-sitter"))
@@ -121,23 +93,6 @@
               :p))
 
 ## parsing tasks
-
-(task "parse" ["ensure-tree-sitter" "gen-parser"]
-  (def file-path
-    (let [from-args (get (dyn :args) 3)]
-      (assert (= :file
-                 (os/stat from-args :mode))
-              (string/format "need a file-path as an argument: %s"
-                             from-args))
-      from-args))
-  (os/setenv "TREE_SITTER_DIR"
-             (string proj-dir "/.tree-sitter"))
-  (os/setenv "TREE_SITTER_LIBDIR"
-             (string proj-dir "/.tree-sitter/lib"))
-  (os/execute ["./bin/tree-sitter"
-               "parse"
-               file-path]
-              :p))
 
 (task "ts-parse" ["ensure-tree-sitter" "ts-gen-parser"]
   (def file-path
@@ -171,7 +126,7 @@
 
 (task "simple-tests" ["clean"
                       "ensure-tree-sitter"
-                      "gen-parser"]
+                      "ts-gen-parser"]
   (os/execute ["janet"
                "script/run-simple-tests.janet"]
               :p))
