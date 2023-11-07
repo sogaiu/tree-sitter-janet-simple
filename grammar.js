@@ -27,18 +27,14 @@ const RADIX_CHUNK =
 const SYM_CHAR_NO_DIGIT_NO_COLON =
   regex("[" +
         "a-zA-Z" +
-        "!$%&*+./<?=>@^_" +
-        "\u{0100}-\u{10ffff}" +
-        "-" + // order matters here
+        "!$%&*+\\-./<=>?@^_" +
         "]");
 // see is_symbol_char_gen in janet's tools/symcharsgen.c
 const SYM_CHAR =
   regex("[" +
         "0-9:" +
         "a-zA-Z" +
-        "!$%&*+./<?=>@^_" +
-        "\u{0100}-\u{10ffff}" +
-        "-" + // order matters here
+        "!$%&*+\\-./<=>?@^_" +
         "]");
 
 // strings
