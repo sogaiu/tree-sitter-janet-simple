@@ -8,10 +8,10 @@ const SIGN =
 const DIGIT =
   regex("[0-9]");
 const DEC_CHUNK =
-  regex("[0-9]+[0-9_]*");
+  regex("[0-9][0-9_]*");
 
 const HEX_CHUNK =
-  regex("[a-fA-F0-9]+[a-fA-F0-9_]*");
+  regex("[a-fA-F0-9][a-fA-F0-9_]*");
 
 const RADIX =
   choice('2', '3', '4', '5', '6', '7', '8', '9', '10',
@@ -21,7 +21,7 @@ const RADIX =
 const ALPHA_NUM =
   regex("[a-zA-Z0-9]");
 const RADIX_CHUNK =
-  regex("[a-zA-Z0-9]+[a-zA-Z0-9_]*");
+  regex("[a-zA-Z0-9][a-zA-Z0-9_]*");
 
 // symbols and keywords
 const SYM_CHAR_NO_DIGIT_NO_COLON =
