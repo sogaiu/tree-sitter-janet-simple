@@ -24,18 +24,6 @@ might disappear at some point:
   them](https://github.com/sogaiu/ts-questions/blob/master/questions/should-parser-source-be-committed/README.md),
   so depending on how things go, these may disappear.
 
-Used to provide but no longer do:
-
-* Node.js bindings - it seems there isn't much love and care going to
-  node-tree-sitter upstream and I don't use or test these.  I felt it
-  was a bit misleading to be providing them so I removed them.  They
-  can be regenerated using an appropriate invocation of `tree-sitter
-  generate` though.
-
-* Rust bindings - like with the Node.js bindings, it's possible to
-  generate these using an appropriate invocation of `tree-sitter
-  generate`.
-
 ---
 
 [1] Currently these files are generated to have ABI 13.
