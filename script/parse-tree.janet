@@ -110,9 +110,8 @@
   (def parse-peg
     ~(sequence (capture (some :S))
                (some " ")
-               "\t"
                (capture (thru "ms"))
-               "\t"
+               (capture (to "("))
                (sequence "("
                          (capture (some :S))
                          " "
