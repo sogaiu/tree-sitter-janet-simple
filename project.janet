@@ -69,6 +69,8 @@
 
 (task "ensure-tree-sitter"
   ["ensure-rust-bits"]
+  (unless (os/stat "tree-sitter-janet-simple")
+    (os/symlink "." "tree-sitter-janet-simple"))
   (unless (os/stat "tree-sitter/target/release/tree-sitter")
     (def dir (os/cwd))
     (assert (run ["git" "clone"
