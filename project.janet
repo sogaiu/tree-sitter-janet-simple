@@ -69,6 +69,13 @@
 
 (task "ensure-tree-sitter"
   ["ensure-rust-bits"]
+  (unless (os/stat "bin/tree-sitter")
+    (def dir (os/cwd))
+    (os/mkdir "bin")
+    (os/cd "bin")
+    (os/symlink "../tree-sitter/target/release/tree-sitter"
+                "tree-sitter")
+    (os/cd dir))
   (unless (os/stat "tree-sitter-janet-simple")
     (os/symlink "." "tree-sitter-janet-simple"))
   (unless (os/stat "tree-sitter/target/release/tree-sitter")
