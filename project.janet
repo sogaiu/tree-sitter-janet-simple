@@ -1,3 +1,5 @@
+(import ./conf/common-paths :as cp)
+
 (declare-project
   :name "tree-sitter-janet-simple"
   :description "A Janet grammar for tree-sitter"
@@ -36,7 +38,7 @@
              (string proj-dir "/.tree-sitter"))
   (os/setenv "TREE_SITTER_LIBDIR"
              (string proj-dir "/.tree-sitter/lib"))
-  (run ["./bin/tree-sitter" ;args]))
+  (run [(string "./" cp/ts-bin-path) ;args]))
 
 ########################################################################
 
@@ -67,17 +69,19 @@
   []
   (and (bin-exists? "cargo") (bin-exists? "rustc")))
 
+(task "make-tree-sitter-config"
+  []
+  (os/mkdir ".tree-sitter")
+  (os/mkdir ".tree-sitter/lib")
+  (spit ".tree-sitter/config.json"
+        (string `{`                         "\n"
+                `  "parser-directories": [` "\n"
+                `    "` proj-dir "/.." `"`  "\n"
+                `  ]`                       "\n"
+                `}`                         "\n")))
+
 (task "ensure-tree-sitter"
-  ["ensure-rust-bits"]
-  (unless (os/stat "bin/tree-sitter")
-    (def dir (os/cwd))
-    (os/mkdir "bin")
-    (os/cd "bin")
-    (os/symlink "../tree-sitter/target/release/tree-sitter"
-                "tree-sitter")
-    (os/cd dir))
-  (unless (os/stat "tree-sitter-janet-simple")
-    (os/symlink "." "tree-sitter-janet-simple"))
+  ["make-tree-sitter-config" "ensure-rust-bits"]
   (unless (os/stat "tree-sitter/target/release/tree-sitter")
     (def dir (os/cwd))
     (assert (run ["git" "clone"
@@ -122,7 +126,7 @@
   ["gen-parser"]
   (assert (run ["janet" "script/run-simple-tests.janet"])))
 
-(task "fetch-some-janet-code"
+(task "fetch-samples"
   []
   (def n
     (if-let [from-args (get (dyn :args) 3)]

@@ -1,5 +1,5 @@
 (def ts-bin-path
-  "bin/tree-sitter")
+  "tree-sitter/target/release/tree-sitter")
 
 (def input-files-dir
   "test/input")
