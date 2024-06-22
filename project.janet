@@ -82,7 +82,7 @@
 
 (task "ensure-tree-sitter"
   ["make-tree-sitter-config" "ensure-rust-bits"]
-  (unless (os/stat "tree-sitter/target/release/tree-sitter")
+  (unless (os/stat cp/ts-bin-path)
     (def dir (os/cwd))
     (assert (run ["git" "clone"
                   "https://github.com/tree-sitter/tree-sitter"]))
