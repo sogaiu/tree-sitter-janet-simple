@@ -5,7 +5,7 @@
 (defn is-dir?
   [path]
   (when-let [path path
-             stat (os/lstat path)]
+             stat (os/stat path)]
     (= :directory (stat :mode))))
 
 (defn is-file?
@@ -16,7 +16,7 @@
   [path]
   (truthy?
     (when-let [path path
-               mode-stat (os/lstat path :mode)]
+               mode-stat (os/stat path :mode)]
       (= :file mode-stat))))
 
 (def fs-sep
