@@ -135,9 +135,9 @@
   (assert (run ["janet"
                 "script/fetch-git-repositories.janet" (string n)])))
 
-(task "real-world-code-test"
+(task "samples-test"
   ["gen-parser"]
   (assert (os/stat "repos") 
           (string "samples directory 'repos' doesn't exist\n"
-                  "hint: use 'fetch-some-janet-code' task"))
+                  "hint: use 'fetch-samples' task"))
   (assert (run ["janet" "script/parse-tree.janet"])))
