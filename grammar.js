@@ -18,6 +18,8 @@ const RADIX =
          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
          '31', '32', '33', '34', '35', '36');
+const ALPHA =
+  regex("[a-zA-Z]");
 const ALPHA_NUM =
   regex("[a-zA-Z0-9]");
 const RADIX_CHUNK =
@@ -125,13 +127,17 @@ module.exports = grammar({
                        seq(RADIX_CHUNK, ".", optional(RADIX_CHUNK))),
                 optional(seq('&',
                              optional(SIGN),
-                             repeat1(ALPHA_NUM))))),
+                             repeat1(ALPHA_NUM))),
+                optional(seq(':',
+                             ALPHA)))),
 
     _hex: $ =>
       token(seq(optional(SIGN),
                 '0x',
                 choice(seq(optional("."), HEX_CHUNK),
-                       seq(HEX_CHUNK, ".", optional(HEX_CHUNK))))),
+                       seq(HEX_CHUNK, ".", optional(HEX_CHUNK))),
+                optional(seq(':',
+                             ALPHA)))),
 
     _dec: $ =>
       token(seq(optional(SIGN),
@@ -139,7 +145,9 @@ module.exports = grammar({
                        seq(DEC_CHUNK, ".", optional(DEC_CHUNK))),
                 optional(seq(choice('e', 'E'),
                              optional(SIGN),
-                             repeat1(DIGIT))))),
+                             repeat1(DIGIT))),
+                optional(seq(':',
+                             ALPHA)))),
 
     str_lit: $ =>
       token(seq('"',
