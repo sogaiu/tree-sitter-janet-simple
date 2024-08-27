@@ -99,11 +99,8 @@ module.exports = grammar({
     // simplest things
 
     bool_lit: $ =>
-      // XXX: without the token here, false and true are exposed as
-      //      anonymous nodes it seems...
-      //      yet, the same does not happen for nil...strange
-      token(choice('false',
-                   'true')),
+      choice('false',
+             'true'),
 
     kwd_lit: $ =>
       prec(2,

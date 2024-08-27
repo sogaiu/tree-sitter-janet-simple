@@ -1,5 +1,10 @@
 [
   {
+    "type": "bool_lit",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "kwd_lit",
     "named": true,
     "fields": {}
@@ -1142,16 +1147,16 @@
     "named": false
   },
   {
-    "type": "bool_lit",
-    "named": true
-  },
-  {
     "type": "buf_lit",
     "named": true
   },
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "false",
+    "named": false
   },
   {
     "type": "long_buf_lit",
@@ -1172,6 +1177,10 @@
   {
     "type": "sym_lit",
     "named": true
+  },
+  {
+    "type": "true",
+    "named": false
   },
   {
     "type": "{",
