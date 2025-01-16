@@ -221,7 +221,7 @@ module.exports = grammar({
     //   |nil
     //   |8
     //   ||8, |||8, etc.
-    // XXX: |() doesn't work...but don't bother disallowing
+    //   |()
     short_fn_lit: $ =>
       seq('|',
           $._lit),
