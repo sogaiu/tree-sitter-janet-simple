@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-janet-simple",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "description": "A Janet grammar for tree-sitter",
   "tree-sitter": [
     {
