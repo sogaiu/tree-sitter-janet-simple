@@ -131,10 +131,12 @@ module.exports = grammar({
     _hex: $ =>
       token(seq(optional(SIGN),
                 '0x',
-                choice(seq(optional("."), HEX_CHUNK),
-                       seq(HEX_CHUNK, ".", optional(HEX_CHUNK))),
-                optional(seq(':',
-                             ALPHA)))),
+                choice(seq(optional('.'), HEX_CHUNK),
+                       seq(HEX_CHUNK, '.', optional(HEX_CHUNK))),
+                optional(seq(choice('p', 'P'),
+                             optional(SIGN),
+                             repeat1(DIGIT))),
+                optional(seq(':', ALPHA)))),
 
     _dec: $ =>
       token(seq(optional(SIGN),
