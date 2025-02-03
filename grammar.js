@@ -120,13 +120,12 @@ module.exports = grammar({
       token(seq(optional(SIGN),
                 RADIX,
                 'r',
-                choice(seq(optional("."), RADIX_CHUNK),
-                       seq(RADIX_CHUNK, ".", optional(RADIX_CHUNK))),
+                choice(seq(optional('.'), RADIX_CHUNK),
+                       seq(RADIX_CHUNK, '.', optional(RADIX_CHUNK))),
                 optional(seq('&',
                              optional(SIGN),
                              repeat1(ALPHA_NUM))),
-                optional(seq(':',
-                             ALPHA)))),
+                optional(seq(':', ALPHA)))),
 
     _hex: $ =>
       token(seq(optional(SIGN),
@@ -140,13 +139,12 @@ module.exports = grammar({
 
     _dec: $ =>
       token(seq(optional(SIGN),
-                choice(seq(optional("."), DEC_CHUNK),
-                       seq(DEC_CHUNK, ".", optional(DEC_CHUNK))),
+                choice(seq(optional('.'), DEC_CHUNK),
+                       seq(DEC_CHUNK, '.', optional(DEC_CHUNK))),
                 optional(seq(choice('e', 'E'),
                              optional(SIGN),
                              repeat1(DIGIT))),
-                optional(seq(':',
-                             ALPHA)))),
+                optional(seq(':', ALPHA)))),
 
     str_lit: $ =>
       token(seq('"',
