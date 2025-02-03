@@ -26,7 +26,7 @@ might disappear at some point:
 
 ---
 
-[1] Currently these files are generated to have ABI 13.
+[1] Currently these files are generated to have ABI 14.
 
 ---
 
