@@ -1,7 +1,7 @@
 {
   "grammars": [
     {
-      "name": "janet-simple",
+      "name": "janet_simple",
       "camelcase": "JanetSimple",
       "scope": "source.janet",
       "path": ".",
