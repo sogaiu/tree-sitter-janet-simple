@@ -81,7 +81,6 @@ bool tree_sitter_janet_simple_external_scanner_scan(
         lexer->advance(lexer, false);
         continue;
       } else { // nope, time to bail
-        lexer->advance(lexer, false);
         break;
       }
     }
